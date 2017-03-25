@@ -1,0 +1,21 @@
+- hosts: localhost
+  tasks:
+    - name: Get data from the module
+      grpib:
+      register: result
+
+    - name: Checkout branch grpib_mem1
+      git:
+        repo: 'https://github.com/he0s/tests.git'
+        dest: '/tmp/mem1'
+        version: 'grpib_mem1'
+      when:
+        - (result.meta.mem > 0 and result.meta.mem < 1073741824)
+
+    - name: Checkout branch grpib_mem2
+      git:
+        repo: 'https://github.com/he0s/tests.git'
+        dest: '/tmp/mem2'
+        version: 'grpib_mem2'
+      when:
+        - result.meta.mem > 1073741824
